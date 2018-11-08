@@ -1,0 +1,86 @@
+
+<html>
+<title>Firebase Messaging Demo</title>
+<style>
+    div {
+        margin-bottom: 15px;
+    }
+</style>
+
+<head>
+  <meta charset="UTF-8">
+	<script src ='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'> </script>
+	<script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
+	
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase-messaging.js"></script>
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head> 
+
+<body>
+    <div id="token"></div>
+    <div id="msg"></div>
+    <div id="notis"></div>
+    <div id="err"></div>
+    <script>
+       MsgElem = document.getElementById("msg")
+       TokenElem = document.getElementById("token")
+       NotisElem = document.getElementById("notis")
+       ErrElem = document.getElementById("err")
+	   
+	   
+	   $(function() {
+			// Initialize Firebase
+			var config = {
+					apiKey: "AIzaSyB7dhjZ4fB0oHDNxCPDpAT660MSl3-l7qo",
+					authDomain: "sample-49ea5.firebaseapp.com",
+					databaseURL: "https://sample-49ea5.firebaseio.com",
+					projectId: "sample-49ea5",
+					storageBucket: "sample-49ea5.appspot.com",
+					messagingSenderId: "455471399959"
+				};
+				
+			firebase.initializeApp(config);
+			const messaging = firebase.messaging();
+			messaging
+				.requestPermission()
+				.then(function () {
+					MsgElem.innerHTML = "Notification permission granted." 
+					console.log("Notification permission granted.");
+
+					// get the token in the form of promise
+					return messaging.getToken()
+				})
+				.then(function(token) {
+					TokenElem.innerHTML = "token is : " + token
+				})
+				.catch(function (err) {
+					ErrElem.innerHTML =  ErrElem.innerHTML + "; " + err
+					console.log("Unable to get permission to notify.", err);
+				});
+
+			messaging.onMessage(function(payload) {
+				console.log("Message received. ", payload);
+				NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload) 
+				ShowNotification(payload.notification.title, payload.notification.body, payload.notification.icon);
+			});
+	   });
+	   
+	   
+		function ShowNotification(title, body, icon) {
+			notification = new Notification(title, {
+				icon: icon,
+				body: body,
+				onclick: function () {
+					parent.focus();
+					window.focus(); //just in case, older browsers
+					this.close();
+				}
+			})
+		}
+		 
+	</script>
+</body>
+</html>

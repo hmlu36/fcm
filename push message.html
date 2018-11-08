@@ -1,0 +1,29 @@
+<head>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+
+<script>
+var key = 'AAAAagw2BBc:APA91bEVMWku5CL7ol1lrTIJPpKOtuAAKp2rM3bzl-q18k5b_IqSxIZr7R_TzfYMKeCr5dd5IsV4Rri-yFe4a4kDtXWOuFYTlZvlMC0P945CD0eNFt9AYCjWt0FxGA7KDgjT9sMRDQAT';
+var to = 'dknovwNsK-k:APA91bGeTAemo4mOVWgq6hlaK8gNvhLQse00_Pwg4HHRqowv9U-osOiEf15G_4DpNe8tQmnKjKb1PrivvVyuPu7BMOlePPHPgSB2sjEAg_SkenjMkTC4lOoo05OrT5fOi79b2LAyHrjY';
+// var to = 'd0W2QODmvhY:APA91bFeqXCcwMyaLOlFBzbfGLwl6LKLmLuclZCXJGJLVLos-j2HnMBbqDx_aSYpVBzAOYPIf1uwfYaSsGOUn42UzYkdM474wTfHO3vGUe0CrRvz800TCs1UM4LIoxzyQSMP8Wb89Kj4';
+var notification = {
+	"title": "FCM Message",
+	"body": "This is an FCM Message",
+};
+
+fetch('https://gcm-http.googleapis.com/gcm/send', {
+  method: 'POST',
+  headers: new Headers({
+    'Authorization': 'key=' + key,
+    'Content-Type': 'application/json'
+  }),
+  body: JSON.stringify({
+    'notification': notification,
+    'to': to
+  })
+}).then(function(response) {
+  console.log(response);
+}).catch(function(error) {
+  console.error(error);
+})
+</script>
